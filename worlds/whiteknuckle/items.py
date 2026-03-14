@@ -5,44 +5,122 @@ from typing import TYPE_CHECKING
 from BaseClasses import Item, ItemClassification
 
 if TYPE_CHECKING:
-    from .world import APQuestWorld
+    from .world import WhiteKnuckleWorld
 
 # Every item must have a unique integer ID associated with it.
 # We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
 # Even if an item doesn't exist on specific options, it must be present in this lookup.
+
+# Similar to the location name to ID lookup in regions.py, more items will be added as White Knuckle gets updates.
+# A similar process is used for items as in regions.py.
+
+USABLE_ITEMS = [
+    "Auto Piton", # Useful
+    "Blink Eye", # Useful (Progression for The Ladder)
+    "Brick", # Useful
+    "Canned Food", # Useful
+    "Delta-0052", # Useful
+    "Explosive Rebar", # Useful
+    "Food Bar", # Useful
+    "Flare Gun", # Useful
+    "Flashlight", # Useful
+    "Grub", # Useful
+    "Hammer/Wrench", # Useful
+    "Injector", # Useful
+    "Milk", # Useful
+    "Pills", # Useful
+    "Piton", # Useful
+    "Rebar", # Useful
+    "Rope Rebar" # Useful
+]
+
+REGIONS = [
+    "Air Exchange", # Progression
+    "Shattered Chambers", # Progression
+    "Interlude: Lockdown", # Progression
+    "Drainage System", # Progression
+    "Waste Heap", # Progression
+    "Pipe Organ", # Progression
+    "Interlude: Ascent", # Progression
+    "Forlorn Gateway", # Progression
+    "Service Shaft", # Progression
+    "Haunted Pier", # Progression
+    "Delta Labs", # Progression
+    "Interlude: Evacuation", # Progression
+    "Transit Scaffold", # Progression
+    "Deadman's Handle", # Progression
+    "Hanging Gardens" # Progression
+]
+
+ARTIFACTS = [
+    "Glove", # Useful
+    "Remote", # Useful
+    "Spear", # Useful
+    "Timepiece", # Useful
+    "Translocator" # Useful
+]
+
+MASTER_ITEM_LIST = USABLE_ITEMS + REGIONS + ARTIFACTS
+
 ITEM_NAME_TO_ID = {
-    "Key": 1,
-    "Sword": 2,
-    "Shield": 3,
-    "Hammer": 4,
-    "Health Upgrade": 5,
-    "Confetti Cannon": 6,
-    "Math Trap": 7,
+    item_name: i + 1 for i, item_name in enumerate(MASTER_ITEM_LIST)
 }
 
 # Items should have a defined default classification.
 # In our case, we will make a dictionary from item name to classification.
 DEFAULT_ITEM_CLASSIFICATIONS = {
-    "Key": ItemClassification.progression,
-    "Sword": ItemClassification.progression | ItemClassification.useful,  # Items can have multiple classifications.
-    "Shield": ItemClassification.progression,
-    "Hammer": ItemClassification.progression,
-    "Health Upgrade": ItemClassification.useful,
-    "Confetti Cannon": ItemClassification.filler,
-    "Math Trap": ItemClassification.trap,
+    "Air Exchange": ItemClassification.progression,
+    "Shattered Chambers": ItemClassification.progression,
+    "Interlude: Lockdown": ItemClassification.progression,
+    "Drainage System": ItemClassification.progression,
+    "Waste Heap": ItemClassification.progression,
+    "Pipe Organ": ItemClassification.progression,
+    "Interlude: Ascent": ItemClassification.progression,
+    "Forlorn Gateway": ItemClassification.progression,
+    "Service Shaft": ItemClassification.progression,
+    "Haunted Pier": ItemClassification.progression,
+    "Delta Labs": ItemClassification.progression,
+    "Interlude: Evacuation": ItemClassification.progression,
+    "Transit Scaffold": ItemClassification.progression,
+    "Deadman's Handle": ItemClassification.progression,
+    "Hanging Gardens": ItemClassification.progression,
+
+    "Auto Piton": ItemClassification.useful,
+    "Blink Eye": ItemClassification.useful | ItemClassification.progression,
+    "Brick": ItemClassification.useful,
+    "Canned Food": ItemClassification.useful,
+    "Delta-0052": ItemClassification.useful,
+    "Explosive Rebar": ItemClassification.useful,
+    "Food Bar": ItemClassification.useful,
+    "Flare Gun": ItemClassification.useful,
+    "Flashlight": ItemClassification.useful,
+    "Grub": ItemClassification.useful,
+    "Hammer/Wrench": ItemClassification.useful,
+    "Injector": ItemClassification.useful,
+    "Milk": ItemClassification.useful,
+    "Pills": ItemClassification.useful,
+    "Piton": ItemClassification.useful,
+    "Rebar": ItemClassification.useful,
+    "Rope Rebar": ItemClassification.useful,
+
+    "Glove": ItemClassification.useful,
+    "Remote": ItemClassification.useful,
+    "Spear": ItemClassification.useful,
+    "Timepiece": ItemClassification.useful,
+    "Translocator": ItemClassification.useful
 }
 
 
 # Each Item instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
-class APQuestItem(Item):
-    game = "APQuest"
+class WhiteKnuckleItem(Item):
+    game = "White Knuckle"
 
 
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
 # To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
 # For now, let's make a function that returns the name of a random filler item here in items.py.
-def get_random_filler_item_name(world: APQuestWorld) -> str:
+def get_random_filler_item_name(world: WhiteKnuckleWorld) -> str:
     # APQuest has an option called "trap_chance".
     # This is the percentage chance that each filler item is a Math Trap instead of a Confetti Cannon.
     # For this purpose, we need to use a random generator.
@@ -55,7 +133,7 @@ def get_random_filler_item_name(world: APQuestWorld) -> str:
     return "Confetti Cannon"
 
 
-def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
+def create_item_with_correct_classification(world: WhiteKnuckleWorld, name: str) -> WhiteKnuckleItem:
     # Our world class must have a create_item() function that can create any of our items by name at any time.
     # So, we make this helper function that creates the item by name with the correct classification.
     # Note: This function's content could just be the contents of world.create_item in world.py directly,
@@ -67,11 +145,11 @@ def create_item_with_correct_classification(world: APQuestWorld, name: str) -> A
     if name == "Health Upgrade" and world.options.hard_mode:
         classification = ItemClassification.progression
 
-    return APQuestItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
+    return WhiteKnuckleItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
-def create_all_items(world: APQuestWorld) -> None:
+def create_all_items(world: WhiteKnuckleWorld) -> None:
     # This is the function in which we will create all the items that this world submits to the multiworld item pool.
     # There must be exactly as many items as there are locations.
     # In our case, there are either six or seven locations.

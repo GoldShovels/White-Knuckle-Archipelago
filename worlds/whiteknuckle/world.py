@@ -21,23 +21,24 @@ from . import items, locations, options, regions, rules, web_world
 # This implementation in particular has the following additional files, each covering one topic:
 # regions.py, locations.py, rules.py, items.py, options.py and web_world.py.
 # It is recommended that you read these in that specific order, then come back to the world class.
-class APQuestWorld(World):
+class WhiteKnuckleWorld(World):
     """
-    APQuest is a minimal 8bit-era inspired adventure game with grid-like movement.
-    Good games don't need more than six checks.
+    White Knuckle is a horror roguelike climbing game where you attempt to escape Substructure 17.
+    You are chased by the Mass, a Class 7 Fluid that consumes everything in its path.
+    Use tools, climb fast, and don't fall. 
     """
 
     # The docstring should contain a description of the game, to be displayed on the WebHost.
 
     # You must override the "game" field to say the name of the game.
-    game = "APQuest"
+    game = "White Knuckle"
 
     # The WebWorld is a definition class that governs how this world will be displayed on the website.
-    web = web_world.APQuestWebWorld()
+    web = web_world.WhiteKnuckleWebWorld()
 
     # This is how we associate the options defined in our options.py with our world.
-    options_dataclass = options.APQuestOptions
-    options: options.APQuestOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+    options_dataclass = options.WhiteKnuckleOptions
+    options: options.WhiteKnuckleOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
@@ -46,7 +47,7 @@ class APQuestWorld(World):
 
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
-    origin_region_name = "Overworld"
+    origin_region_name = "Deep Storage"
 
     # Our world class must have certain functions ("steps") that get called during generation.
     # The main ones are: create_regions, set_rules, create_items.
@@ -63,7 +64,7 @@ class APQuestWorld(World):
 
     # Our world class must also have a create_item function that can create any one of our items by name at any time.
     # We also put this in a different file, the same one that create_items is in.
-    def create_item(self, name: str) -> items.APQuestItem:
+    def create_item(self, name: str) -> items.WhiteKnuckleItem:
         return items.create_item_with_correct_classification(self, name)
 
     # For features such as item links and panic-method start inventory, AP may ask your world to create extra filler.
