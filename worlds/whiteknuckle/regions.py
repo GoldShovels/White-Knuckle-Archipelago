@@ -98,23 +98,50 @@ def connect_regions(world: APQuestWorld) -> None:
     # Okay, now we can get connecting. For this, we need to create Entrances.
     # Entrances are inherently one-way, but crucially, AP assumes you can always return to the origin region.
     # One way to create an Entrance is by calling the Entrance constructor.
-    overworld_to_bottom_right_room = Entrance(world.player, "Overworld to Bottom Right Room", parent=overworld)
-    overworld.exits.append(overworld_to_bottom_right_room)
+    #overworld_to_bottom_right_room = Entrance(world.player, "Overworld to Bottom Right Room", parent=overworld)
+    #overworld.exits.append(overworld_to_bottom_right_room)
 
     # You can then connect the Entrance to the target region.
-    overworld_to_bottom_right_room.connect(bottom_right_room)
+    #overworld_to_bottom_right_room.connect(bottom_right_room)
 
     # An even easier way is to use the region.connect helper.
-    overworld.connect(right_room, "Overworld to Right Room")
-    right_room.connect(final_boss_room, "Right Room to Final Boss Room")
+    #overworld.connect(right_room, "Overworld to Right Room")
+
+    deep_storage.connect(silos_break_room, "Deep Storage to Air Exchange")
+    silos_break_room.connect(air_exchange, "Silos Break Room to Deep Storage")
+    silos_break_room.connect(shattered_chambers, "Silos Break Room to Shattered Chambers")
+
+    deep_storage.connect(interlude_lockdown, "Deep Storage to Interlude Lockdown")
+    air_exchange.connect(interlude_lockdown, "Air Exchange to Interlude Lockdown")
+
+    interlude_lockdown.connect(drainage_system, "Interlude Lockdown to Drainage System")
+    drainage_system.connect(waste_heap, "Drainage System to Waste Heap")
+    drainage_system.connect(pipe_organ, "Drainage System to Pipe Organ")
+    waste_heap.connect(interlude_ascent, "Waste Heap to Pipe Organ")
+
+    interlude_ascent.connect(forlorn_gateway, "Pipe Organ to Forlorn Gateway")
+    forlorn_gateway.connect(service_shaft, "Forlorn Gateway to Service Shaft")
+    service_shaft.connect(haunted_pier, "Forlorn Gateway to Haunted Pier")
+    haunted_pier.connect(delta_labs, "Haunted Pier to Delta Labs")
+
+    delta_labs.connect(interlude_evacuation, "Delta Labs to Interlude Ascent")
+
+    interlude_evacuation.connect(transit_scafold, "Interlude Ascent to Transit Scaffold")
+    transit_scafold.connect(deadmans_handle, "Transit Scaffold to Deadman's Handle")
+    deadmans_handle.connect(hanging_gardens, "Deadman's Handle to Hanging Gardens")
+
+
+
 
     # The region.connect helper even allows adding a rule immediately.
     # We'll talk more about rule creation in the set_all_rules() function in rules.py.
-    overworld.connect(top_left_room, "Overworld to Top Left Room", lambda state: state.has("Key", world.player))
+    #overworld.connect(top_left_room, "Overworld to Top Left Room", lambda state: state.has("Key", world.player))
 
     # Some Entrances may only exist if the player enables certain options.
     # In our case, the Hammer locks the top middle chest in its own room if the hammer option is enabled.
     # In this case, we previously created an extra "Top Middle Room" region that we now need to connect to Overworld.
+    '''
     if world.options.hammer:
         top_middle_room = world.get_region("Top Middle Room")
         overworld.connect(top_middle_room, "Overworld to Top Middle Room")
+    '''
